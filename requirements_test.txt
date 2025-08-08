@@ -1,0 +1,17 @@
+# Wazuh Load Generator - Testberoenden
+# Endast beroenden som behövs för att köra tester
+
+# Pip-version
+pip==25.2
+
+# Test-ramverk
+pytest==7.4.3
+
+# Async test-stöd
+pytest-asyncio==0.21.1
+
+# HTTP-klient för tester
+httpx==0.25.2
+
+# Coverage-rapportering
+pytest-cov==4.1.0

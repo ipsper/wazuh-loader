@@ -1,0 +1,67 @@
+{
+  "test_scenarios": {
+    "light_load": {
+      "description": "Lätt last för utveckling och testning",
+      "count": 50,
+      "delay": 0.5,
+      "duration": 300
+    },
+    "medium_load": {
+      "description": "Medium last för prestandatestning",
+      "count": 200,
+      "delay": 0.2,
+      "duration": 600
+    },
+    "heavy_load": {
+      "description": "Hög last för stress-testning",
+      "count": 500,
+      "delay": 0.05,
+      "duration": 1800
+    },
+    "burst_load": {
+      "description": "Burst-last för att testa systemets kapacitet",
+      "count": 1000,
+      "delay": 0.01,
+      "duration": 300
+    }
+  },
+  "log_types": {
+    "ssh": {
+      "description": "SSH-inloggningsförsök och autentiseringsfel",
+      "weight": 0.3
+    },
+    "web": {
+      "description": "Web server loggar (Apache/Nginx)",
+      "weight": 0.25
+    },
+    "firewall": {
+      "description": "Brandväggsloggar och nätverkshändelser",
+      "weight": 0.2
+    },
+    "system": {
+      "description": "Systemloggar och tjänstehändelser",
+      "weight": 0.15
+    },
+    "malware": {
+      "description": "Malware-detektering och säkerhetshändelser",
+      "weight": 0.1
+    }
+  },
+  "targets": {
+    "local": {
+      "host": "localhost",
+      "port": 514,
+      "protocol": "udp"
+    },
+    "remote": {
+      "host": "wazuh-server.example.com",
+      "port": 514,
+      "protocol": "udp"
+    },
+    "tcp_target": {
+      "host": "localhost",
+      "port": 601,
+      "protocol": "tcp"
+    }
+  }
+}

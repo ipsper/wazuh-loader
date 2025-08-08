@@ -1,0 +1,32 @@
+# Wazuh Load Generator - Produktberoenden
+# Endast nödvändiga beroenden för att köra produkten
+
+# Pip-version
+pip==25.2
+
+# HTTP-klient för API-anrop
+requests==2.31.0
+
+# Fake data-generering
+faker==19.6.2
+
+# Datumhantering
+python-dateutil==2.8.2
+
+# Färgad terminal-output
+colorama==0.4.6
+
+# Kommandoradsargument
+argparse==1.4.0
+
+# FastAPI web-framework
+fastapi==0.115.6
+
+# ASGI-server
+uvicorn[standard]==0.32.1
+
+# Datavalidering
+pydantic==2.10.4
+
+# Multipart-formulär
+python-multipart==0.0.6
