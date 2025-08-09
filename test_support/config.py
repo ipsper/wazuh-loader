@@ -72,12 +72,14 @@ class TestConfig:
             self.config["targets"]["remote"]["protocol"] = protocol
         
         # API-konfiguration
-        if os.getenv("TEST_API_HOST"):
-            self.config["api"]["host"] = os.getenv("TEST_API_HOST")
-            self.config["api"]["base_url"] = f"http://{os.getenv('TEST_API_HOST')}:{self.config['api']['port']}"
+        api_host = os.getenv("TEST_API_HOST") or os.getenv("WAZUH_API_HOST")
+        if api_host:
+            self.config["api"]["host"] = api_host
+            self.config["api"]["base_url"] = f"http://{api_host}:{self.config['api']['port']}"
         
-        if os.getenv("TEST_API_PORT"):
-            port = int(os.getenv("TEST_API_PORT"))
+        api_port = os.getenv("TEST_API_PORT") or os.getenv("WAZUH_API_PORT")
+        if api_port:
+            port = int(api_port)
             self.config["api"]["port"] = port
             self.config["api"]["base_url"] = f"http://{self.config['api']['host']}:{port}"
         

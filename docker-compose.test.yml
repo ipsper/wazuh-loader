@@ -1,0 +1,43 @@
+# Wazuh Load Generator - Test Docker Compose
+# =========================================
+# Kör test-miljön med API-server på port 9090
+
+version: '3.8'
+
+services:
+  wazuh-loader-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: wazuh-loader-test
+    ports:
+      - "9090:9090"  # Exponera port 9090
+    environment:
+      - PYTHONPATH=/app
+      - WAZUH_TEST_HOST=0.0.0.0
+      - WAZUH_TEST_PORT=514
+      - WAZUH_API_HOST=0.0.0.0
+      - WAZUH_API_PORT=9090
+    volumes:
+      # Mounta test-koden för live-utveckling
+      - ./tests:/app/tests:ro
+      - ./test_support:/app/test_support:ro
+      - ./wazuh_loader.py:/app/wazuh_loader.py:ro
+      - ./api_server.py:/app/api_server.py:ro
+      - ./config.json:/app/config.json:ro
+    networks:
+      - wazuh-test-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  wazuh-test-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

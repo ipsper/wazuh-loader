@@ -1,0 +1,44 @@
+# Wazuh Load Generator - Test Docker Image
+# ======================================
+# Docker image för att köra tester och API-server
+
+FROM python:3.13-slim
+
+# Sätt miljövariabler
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Installera system-dependencies
+RUN apt-get update && apt-get install -y \
+    python3-venv \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Skapa virtual environment
+RUN python -m venv /opt/venv
+
+# Kopiera requirements-filer
+COPY requirements.txt /tmp/requirements.txt
+COPY requirements_test.txt /tmp/requirements_test.txt
+
+# Installera Python dependencies i venv
+RUN . /opt/venv/bin/activate && \
+    pip install --upgrade pip==25.2 && \
+    pip install -r /tmp/requirements.txt && \
+    pip install -r /tmp/requirements_test.txt
+
+# Kopiera applikationskod
+COPY . /app
+WORKDIR /app
+
+# Exponera port 9090 för API
+EXPOSE 9090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:9090/health || exit 1
+
+# Starta API-servern på 0.0.0.0:9090
+CMD ["/opt/venv/bin/python", "api_server.py", "--host", "0.0.0.0", "--port", "9090"]

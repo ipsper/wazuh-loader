@@ -54,14 +54,14 @@ show_help() {
     echo "  -a, --api-host HOST    Host för API server (default: $DEFAULT_API_HOST)"
     echo "  -P, --api-port PORT    Port för API server (default: $DEFAULT_API_PORT)"
     echo "  -t, --test-type TYPE   Kör bara specifik test typ (unit, api, integration, status, all)"
-    echo "  -v, --verbose          Verbose output"
+    echo "  -s, --silent           Silent mode on output"
     echo "  --help                 Visa denna hjälp"
     echo ""
     echo "EXAMPLES:"
     echo "  $0                                    # Kör alla tester med defaults"
     echo "  $0 -h localhost -p 514               # Kör med specifik host/port"
     echo "  $0 -t status                         # Kör bara status code tester"
-    echo "  $0 -t unit -v                        # Kör unit tester med verbose"
+    echo "  $0 -t unit -s                        # Kör unit tester silent"
     echo ""
 }
 
@@ -71,7 +71,7 @@ PORT="$DEFAULT_PORT"
 API_HOST="$DEFAULT_API_HOST"
 API_PORT="$DEFAULT_API_PORT"
 TEST_TYPE="all"
-VERBOSE=""
+SILENT=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -95,8 +95,8 @@ while [[ $# -gt 0 ]]; do
             TEST_TYPE="$2"
             shift 2
             ;;
-        -v|--verbose)
-            VERBOSE="-v"
+        -s|--silent)
+            SILENT="true"
             shift
             ;;
         --help)
@@ -148,10 +148,10 @@ run_tests() {
     
     print_header "Kör $test_name"
     
-    if [[ -n "$VERBOSE" ]]; then
-        python -m pytest "$test_pattern" $VERBOSE --tb=short
-    else
+    if [[ -n "$SILENT" ]]; then
         python -m pytest "$test_pattern" --tb=short -q
+    else
+        python -m pytest "$test_pattern" -v --tb=short
     fi
     
     if [[ $? -eq 0 ]]; then

@@ -94,6 +94,33 @@ docker build -t wazuh-loader .
 docker run -p 8000:8000 wazuh-loader
 ```
 
+### 🧪 Test Container (NYTT!)
+
+För att köra tester i en isolerad Docker-miljö:
+
+```bash
+# Starta test-container på port 9090
+./start_test_container.sh
+
+# Kör tester i containern
+./run_tests_in_container.sh
+
+# Kör specifika tester
+./run_tests_in_container.sh -t status
+./run_tests_in_container.sh -t unit
+./run_tests_in_container.sh -t api
+
+# Stoppa test-container
+docker-compose -f docker-compose.test.yml down
+```
+
+**Test Container Features:**
+- ✅ **Port 9090** - Separerat från produkt-port 8000
+- ✅ **Health endpoint** - `http://localhost:9090/health`
+- ✅ **Live test-kod** - Mountar test-filer för live-utveckling
+- ✅ **Isolerad miljö** - Separata dependencies för tester
+- ✅ **Flexibel konfiguration** - Konfigurerbara host/port parametrar
+
 ## Användning
 
 ### Kommandoradsanvändning
